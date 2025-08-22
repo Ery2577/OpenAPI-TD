@@ -1,0 +1,52 @@
+openapi: 3.0.3
+info:
+  title: User Management API
+  version: 1.0.0
+paths:
+  /users:
+    get:
+      summary: Liste d'utilisateurs
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            example: 1
+          description: Numéro de page
+        - in: query
+          name: size
+          schema:
+            type: integer
+            example: 20
+          description: Nombre d’utilisateurs par page
+      responses:
+        '200':
+          description: Liste d’utilisateurs retrouvés
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    email:
+                      type: string
+                  example:
+                    id: 1
+                    name: Alice
+                    email: alice@example.com
+        '400':
+          description: Mauvais paramètres
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: Bad types for provided query parameters
