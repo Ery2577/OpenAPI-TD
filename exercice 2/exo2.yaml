@@ -1,0 +1,95 @@
+openapi : 3.0.3
+
+info : 
+  title : User Management API
+  version : 1.0.0
+  description : API de gestion des utilisateurs
+
+servers :
+  - url : http://localhost:3000
+    description : Serveur local de développement
+
+  paths : 
+    /users:
+      get: 
+        summary: Liste d'utilisateurs paginée
+        description: Retourne une liste d'utilisateurs
+        parameters:
+          - $ref: '#/components/parameters/PageParam'
+          - $ref: '#/components/parameters/SizeParam'
+        responses :
+          '200':
+            description: Liste des utilisateurs retrouvées
+            content: 
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/User'
+                  examples:
+                sample:
+                  summary: Exemple de liste d'utilisateurs
+                  value:
+                    - id: 1
+                      name: Alice
+                      email: alice@example.com
+                    - id: 2
+                      name: Bob
+                      email: bob@example.com
+            '400':
+              description: Requête invalide
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Error'
+                  examples:
+                    badtypes:
+                      value:
+                        code: 400
+                        message: "Type de paramètre invalide"
+
+components:
+  schemas:
+    User:
+      type: object
+      required: [id, name, email]
+      properties:
+        id:
+          type: integer
+          Exemple: 1
+        name:
+          type: string
+          example: "Alice"
+        email: 
+          type: string
+          format: email
+          example: alice@gmail.com
+  ErrorResponse:
+    type: object
+    required: [error]
+    properties:
+      error:
+        type: string
+        example: Utilisateur non trouvé
+
+parameters :
+  PageParam: 
+    name: PageParam
+    in: query
+    description: Numéro de page (>= 1)
+    required: false
+    schema:
+      type: integer
+      minimum: 1
+      default: 1
+      example: 1
+  SizeParam:
+    name: SizeParam
+    in: query
+    description: Taille de la page (>= 1)
+    required: false
+    schema:
+      type: integer
+      minimum: 1
+      default: 10
+      example: 10
